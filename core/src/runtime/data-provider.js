@@ -77,6 +77,11 @@ function createDataProvider(deps) {
         return callWorkerReadOnce(`bag:${String(accountId || '')}`, accountId, 'getBag');
     }
 
+    function getCollections(ref) {
+        const accountId = resolveAccountId(ref);
+        return callWorkerReadOnce('collections:' + String(accountId || ''), accountId, 'getCollections');
+    }
+
     function getIllustratedList(ref, type, level) {
         const accountId = resolveAccountId(ref);
         const key = `illustrated:${String(accountId || '')}:${String(type)}:${String(level)}`;
@@ -302,6 +307,7 @@ function createDataProvider(deps) {
 
         // ========== Illustrated ==========
         getIllustratedList,
+        getCollections,
         claimIllustratedRewards: (ref, type) => callWorkerApi(resolveAccountId(ref), 'claimIllustratedRewards', type),
 
         // ========== Career ==========

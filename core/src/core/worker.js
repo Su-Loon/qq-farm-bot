@@ -2156,6 +2156,11 @@ async function handleApiCall(msg) {
                 result = await brewAndSellQingmeiWine(args[0] || {});
                 break;
             }
+            case 'getCollections': {
+                const { getCollectionsSnapshot } = require('../services/collections');
+                result = await getCollectionsSnapshot();
+                break;
+            }
             case 'getIllustratedList': {
                 const { getIllustratedListV2 } = require('../services/illustrated');
                 result = await getIllustratedListV2(args[0], args[1]);

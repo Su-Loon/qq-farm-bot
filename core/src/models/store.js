@@ -248,7 +248,7 @@ const DEFAULT_OFFLINE_REMINDER = {
 };
 
 const DEFAULT_FERTILIZER_LAND_TYPES = ['purple', 'gold', 'black', 'red', 'normal'];
-const FERTILIZER_LAND_TYPE_SET = new Set(DEFAULT_FERTILIZER_LAND_TYPES);
+const FERTILIZER_LAND_TYPE_SET = new Set(['blue', ...DEFAULT_FERTILIZER_LAND_TYPES]);
 
 /** 默认自动化配置 */
 const DEFAULT_AUTOMATION = {

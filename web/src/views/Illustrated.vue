@@ -4,6 +4,8 @@ import { computed, onMounted, ref, watch } from 'vue'
 import ConfirmModal from '@/components/ConfirmModal.vue'
 import IllustratedItemCard from '@/components/illustrated/IllustratedItemCard.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import CollectionsPanel from '@/components/CollectionsPanel.vue'
+import MutationCatalogPanel from '@/components/MutationCatalogPanel.vue'
 import FarmPageHeader from '@/components/ui/FarmPageHeader.vue'
 import { useAccountStore } from '@/stores/account'
 import { useIllustratedStore } from '@/stores/illustrated'
@@ -19,6 +21,14 @@ const { items, summary, loading, buying, error, userLevel } = storeToRefs(illust
 
 const filter = ref<'all' | 'unlocked' | 'locked'>('all')
 const illustratedType = ref(1)
+
+// 2026-11-01 移植：图鉴 / 藏品 / 变异宝典 三视图
+const viewMode = ref<'dex' | 'collections' | 'mutations'>('dex')
+const viewTabs = [
+  { value: 'dex' as const, label: '图鉴' },
+  { value: 'collections' as const, label: '藏品' },
+  { value: 'mutations' as const, label: '变异宝典' },
+]
 
 const showConfirm = ref(false)
 const confirmTitle = ref('确认购买')
@@ -171,7 +181,25 @@ onMounted(() => {
 <template>
   <section class="illustrated-page space-y-4">
     <FarmPageHeader scene title="收藏图鉴" description="把每一次发现，收藏成庄园的成长印记。" icon="i-carbon-book" />
-    <div class="illustrated-body">
+    <div class="mb-3 flex flex-wrap items-center gap-2">
+      <div class="farm-segmented">
+        <button
+          v-for="item in viewTabs"
+          :key="item.value"
+          class="min-w-20 rounded-md px-3 text-sm font-medium transition"
+          :class="segmentedButtonClasses(viewMode === item.value)"
+          :style="viewMode === item.value ? { backgroundColor: 'var(--theme-primary)' } : {}"
+          @click="viewMode = item.value"
+        >
+          {{ item.label }}
+        </button>
+      </div>
+    </div>
+
+    <CollectionsPanel v-if="viewMode === 'collections'" />
+    <MutationCatalogPanel v-else-if="viewMode === 'mutations'" />
+
+    <div v-if="viewMode === 'dex'" class="illustrated-body">
       <div class="illustrated-intro">
         <div class="illustrated-summary">
           <div class="flex flex-wrap items-center gap-2 text-sm">
